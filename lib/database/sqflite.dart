@@ -9,7 +9,7 @@ class DBHelper {
       join(dbPath, 'nandur_id.db'),
       onCreate: (db, version) async {
         return db.execute(
-          'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT, email TEXT UNIQUE, password TEXT)',
+          'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT, email TEXT UNIQUE, password TEXT, location TEXT, dob TEXT, gender TEXT)',
         );
       },
       version: 1,
@@ -27,7 +27,6 @@ class DBHelper {
             ConflictAlgorithm.fail, // Throws error on duplicate email
       );
     } catch (e) {
-      print("Registration error: $e");
       return -1;
     }
   }
@@ -60,6 +59,7 @@ class DBHelper {
     if (results.isNotEmpty) {
       return UserModel.fromMap(results.first);
     }
+    print(db());
     return null;
   }
 }

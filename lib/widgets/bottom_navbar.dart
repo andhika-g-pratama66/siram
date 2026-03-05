@@ -38,7 +38,7 @@ class _NavBarGlobalState extends State<NavBarGlobal> {
             icon: Icon(Icons.calendar_month),
             label: 'Calendar',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
         ],
         currentIndex: _selectedIndex,
         onTap: onTapNavBar,

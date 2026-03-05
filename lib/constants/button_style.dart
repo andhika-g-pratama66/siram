@@ -46,4 +46,14 @@ class AppButtonStyles {
       shape: _baseShape,
     );
   }
+
+  static ButtonStyle greenWeather() {
+    return ElevatedButton.styleFrom(
+      fixedSize: _defaultSize,
+      backgroundColor: AppColor.lightGreen,
+      padding: EdgeInsets.all(16),
+      minimumSize: Size.fromHeight(100),
+      shape: _baseShape,
+    );
+  }
 }

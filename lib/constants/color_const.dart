@@ -6,4 +6,5 @@ class AppColor {
   static const alertRed = Color(0xffD92626);
   static const purple = Color(0xff775FE7);
   static const light = Color(0xfff5fafb);
+  static const lightGreen = Color(0xffDDF5E6);
 }

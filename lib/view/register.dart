@@ -9,6 +9,7 @@ import 'package:nandur_id/database/sqflite.dart';
 import 'package:nandur_id/models/user_model.dart';
 import 'package:nandur_id/utils/navigator.dart';
 import 'package:nandur_id/utils/validator_helper.dart';
+
 import 'package:nandur_id/view/login.dart';
 import 'package:nandur_id/widgets/bottom_navbar.dart';
 
