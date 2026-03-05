@@ -36,4 +36,14 @@ class AppButtonStyles {
       shape: _baseShape,
     );
   }
+
+  //solid orange
+  static ButtonStyle solidOrange() {
+    return ElevatedButton.styleFrom(
+      fixedSize: _defaultSize,
+      backgroundColor: AppColor.orangeButton,
+      foregroundColor: Colors.white,
+      shape: _baseShape,
+    );
+  }
 }

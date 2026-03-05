@@ -9,6 +9,7 @@ class PreferenceHandler {
 
   //Key user
   static const String _isLogin = 'isLogin';
+  static const String _userEmail = 'user_email';
 
   //CREATE
   static Future<void> storingIsLogin(bool isLogin) async {
@@ -22,6 +23,24 @@ class PreferenceHandler {
 
     var data = prefs.getBool(_isLogin);
     return data;
+  }
+
+  //Store Email
+  static Future<void> storingEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_email', email);
+  }
+
+  //Get Email
+  static Future<String?> getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_email');
+  }
+
+  //Delete Storing Email
+  static Future<void> deleteStoringEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_userEmail);
   }
 
   //DELETE

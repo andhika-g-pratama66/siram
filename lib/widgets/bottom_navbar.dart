@@ -12,7 +12,7 @@ class NavBarGlobal extends StatefulWidget {
 
 class _NavBarGlobalState extends State<NavBarGlobal> {
   int _selectedIndex = 0;
-
+  // final String email;
   static List<Widget> widgetOptions = <Widget>[
     Homescreen(),
     CalendarScreen(),
