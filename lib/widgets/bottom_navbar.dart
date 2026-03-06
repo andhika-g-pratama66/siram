@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandur_id/constants/color_const.dart';
 import 'package:nandur_id/view/calendar.dart';
 import 'package:nandur_id/view/homescreen.dart';
 import 'package:nandur_id/view/profile.dart';
@@ -12,6 +13,12 @@ class NavBarGlobal extends StatefulWidget {
 
 class _NavBarGlobalState extends State<NavBarGlobal> {
   int _selectedIndex = 0;
+  static List<Color> appBarColorOptions = <Color>[
+    AppColor.baseGreen,
+    AppColor.light,
+    AppColor.light,
+  ];
+
   // final String email;
   static List<Widget> widgetOptions = <Widget>[
     Homescreen(),
@@ -28,7 +35,7 @@ class _NavBarGlobalState extends State<NavBarGlobal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(backgroundColor: appBarColorOptions[_selectedIndex]),
       body: Center(child: widgetOptions.elementAt(_selectedIndex)),
 
       bottomNavigationBar: BottomNavigationBar(

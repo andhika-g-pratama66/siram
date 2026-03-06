@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nandur_id/constants/color_const.dart';
+import 'package:nandur_id/constants/default_font.dart';
 import 'package:nandur_id/database/preference.dart';
 import 'package:nandur_id/database/sqflite.dart';
 import 'package:nandur_id/models/user_model.dart';
@@ -38,14 +40,17 @@ class _HomescreenState extends State<Homescreen> {
         : _user == null
         ? const Center(child: Text("No user data found"))
         : SafeArea(
-            child: Padding(
-              padding: const EdgeInsetsGeometry.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Text('Hello,  ${_user!.fullName}'),
-                  LocationDisplay(),
-                ],
-              ),
+            child: Column(
+              children: [
+                Container(
+                  color: AppColor.baseGreen,
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    children: [LocationDisplay(), SizedBox(height: 20)],
+                  ),
+                ),
+                // Container(child: ,),
+              ],
             ),
           );
   }

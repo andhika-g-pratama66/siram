@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nandur_id/constants/button_style.dart';
-import 'package:nandur_id/constants/color_const.dart';
+
 import 'package:nandur_id/services/geolocator_service.dart';
 
 class LocationDisplay extends StatelessWidget {
@@ -9,7 +9,7 @@ class LocationDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: LocationService.getCurrentLocation(),
+      future: LocationService.getDisplayLocation(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -25,7 +25,6 @@ class LocationDisplay extends StatelessWidget {
         if (snapshot.hasData) {
           final cityName = snapshot.data!;
 
-          // Using a Simple Text display
           return ElevatedButton(
             style: AppButtonStyles.greenWeather(),
             onPressed: () {},

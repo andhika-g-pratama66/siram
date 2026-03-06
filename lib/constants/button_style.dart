@@ -51,6 +51,7 @@ class AppButtonStyles {
     return ElevatedButton.styleFrom(
       fixedSize: _defaultSize,
       backgroundColor: AppColor.lightGreen,
+
       padding: EdgeInsets.all(16),
       minimumSize: Size.fromHeight(100),
       shape: _baseShape,
