@@ -1,4 +1,3 @@
-import 'package:nandur_id/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -8,58 +7,37 @@ class DBHelper {
     return openDatabase(
       join(dbPath, 'nandur_id.db'),
       onCreate: (db, version) async {
-        return db.execute(
-          'CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, fullName TEXT, email TEXT UNIQUE, password TEXT, location TEXT, dob TEXT, gender TEXT)',
-        );
+        await db.execute('''
+          CREATE TABLE plants (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            plantName TEXT, 
+            description TEXT, 
+            category TEXT, 
+            wateringIntervalDays INTEGER, 
+            fertilizingIntervalDays INTEGER
+            lastWatered TEXT
+            createdAt TEXT
+            FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            fullName TEXT, 
+            email TEXT UNIQUE, 
+            password TEXT, 
+            location TEXT, 
+            dob TEXT, 
+            gender TEXT,
+            createdAt TEXT
+          )
+        ''');
+      },
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
       },
       version: 1,
     );
-  }
-
-  static Future<int> registerUser(UserModel user) async {
-    final dbs = await db();
-    try {
-      // Returns the ID of the newly inserted row
-      return await dbs.insert(
-        'users',
-        user.toMap(),
-        conflictAlgorithm:
-            ConflictAlgorithm.fail, // Throws error on duplicate email
-      );
-    } catch (e) {
-      return -1;
-    }
-  }
-
-  static Future<UserModel?> loginUser({
-    required String email,
-    required String password,
-  }) async {
-    final dbs = await db();
-    final List<Map<String, dynamic>> results = await dbs.query(
-      "users",
-      where: 'email = ? AND password = ?',
-      whereArgs: [email, password],
-    );
-    if (results.isNotEmpty) {
-      return UserModel.fromMap(results.first);
-    }
-
-    return null;
-  }
-
-  static Future<UserModel?> getUser(String email) async {
-    final dbs = await db();
-    final List<Map<String, dynamic>> results = await dbs.query(
-      "users",
-      where: 'email = ?',
-      whereArgs: [email],
-      limit: 1,
-    );
-    if (results.isNotEmpty) {
-      return UserModel.fromMap(results.first);
-    }
-    print(db());
-    return null;
   }
 }

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:nandur_id/constants/color_const.dart';
 
 import 'package:nandur_id/database/preference.dart';
-import 'package:nandur_id/database/sqflite.dart';
+
+import 'package:nandur_id/database/user_helper.dart';
 import 'package:nandur_id/models/user_model.dart';
 
 import 'package:nandur_id/utils/navigator.dart';
@@ -32,7 +33,7 @@ class _MyProfileState extends State<MyProfile> {
   Future<void> _fetchUserData() async {
     String? email = await PreferenceHandler.getEmail();
     if (email != null) {
-      UserModel? data = await DBHelper.getUser(email);
+      UserModel? data = await UserHelper.getUser(email);
       setState(() {
         _user = data;
         _isLoading = false;

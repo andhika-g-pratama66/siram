@@ -5,7 +5,8 @@ import 'package:nandur_id/constants/color_const.dart';
 import 'package:nandur_id/constants/default_font.dart';
 import 'package:nandur_id/constants/form_decoration.dart';
 import 'package:nandur_id/database/preference.dart';
-import 'package:nandur_id/database/sqflite.dart';
+
+import 'package:nandur_id/database/user_helper.dart';
 import 'package:nandur_id/models/user_model.dart';
 import 'package:nandur_id/utils/navigator.dart';
 import 'package:nandur_id/utils/validator_helper.dart';
@@ -75,8 +76,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       // TODO: ADD OBSCURE TEXT SWITCH
                       TextFormField(
                         controller: passwordController,
-                        validator: (value) =>
-                            _validator.validatePassword(value),
+                        //TODO: remove validator
+                        // validator: (value) =>
+                        //     _validator.validatePassword(value),
                         obscureText: true,
                         decoration: formInputConstant(
                           labelText: 'Password',
@@ -141,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             if (_isAgreed) {
-                              final existingUser = await DBHelper.getUser(
+                              final existingUser = await UserHelper.getUser(
                                 emailController.text,
                               );
                               if (existingUser != null) {
@@ -155,7 +157,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 return;
                               }
 
-                              DBHelper.registerUser(
+                              UserHelper.registerUser(
                                 UserModel(
                                   fullName: nameController.text,
                                   email: emailController.text,

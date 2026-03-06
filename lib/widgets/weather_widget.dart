@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nandur_id/constants/button_style.dart';
+import 'package:nandur_id/constants/color_const.dart';
 
 import 'package:nandur_id/services/geolocator_service.dart';
 
@@ -12,7 +13,7 @@ class LocationDisplay extends StatelessWidget {
       future: LocationService.getDisplayLocation(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return Center(child: const CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {

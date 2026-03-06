@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nandur_id/constants/color_const.dart';
-import 'package:nandur_id/constants/default_font.dart';
+
 import 'package:nandur_id/database/preference.dart';
-import 'package:nandur_id/database/sqflite.dart';
+
+import 'package:nandur_id/database/user_helper.dart';
 import 'package:nandur_id/models/user_model.dart';
+import 'package:nandur_id/widgets/garden_widget.dart';
 import 'package:nandur_id/widgets/weather_widget.dart';
 
 class Homescreen extends StatefulWidget {
@@ -25,7 +27,7 @@ class _HomescreenState extends State<Homescreen> {
   Future<void> _fetchUserData() async {
     String? email = await PreferenceHandler.getEmail();
     if (email != null) {
-      UserModel? data = await DBHelper.getUser(email);
+      UserModel? data = await UserHelper.getUser(email);
       setState(() {
         _user = data;
         _isLoading = false;
@@ -46,10 +48,13 @@ class _HomescreenState extends State<Homescreen> {
                   color: AppColor.baseGreen,
                   padding: EdgeInsets.symmetric(horizontal: 32),
                   child: Column(
-                    children: [LocationDisplay(), SizedBox(height: 20)],
+                    children: [LocationDisplay(), SizedBox(height: 32)],
                   ),
                 ),
-                // Container(child: ,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [SizedBox(height: 20), GardenWidget()],
+                ),
               ],
             ),
           );

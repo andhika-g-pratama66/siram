@@ -9,6 +9,7 @@ class UserModel {
   final String? location;
   final String? dob;
   final String? gender;
+  final String? createdAt;
   UserModel({
     this.id,
     required this.fullName,
@@ -17,6 +18,7 @@ class UserModel {
     this.location,
     this.dob,
     this.gender,
+    this.createdAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +30,7 @@ class UserModel {
       'location': location,
       'dob': dob,
       'gender': gender,
+      'createdAt': createdAt ?? DateTime.now().toIso8601String(),
     };
   }
 
@@ -40,6 +43,7 @@ class UserModel {
       location: map['location'] != null ? map['location'] as String : null,
       dob: map['dob'] != null ? map['dob'] as String : null,
       gender: map['gender'] != null ? map['gender'] as String : null,
+      createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
     );
   }
 
