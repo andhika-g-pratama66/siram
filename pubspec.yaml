@@ -11,11 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
   # flutter_local_notifications: ^20.1.0
+  font_awesome_flutter: ^11.0.0
   geocoding: ^4.0.0
   geolocator: ^14.0.2
   google_fonts: ^8.0.2
   http: ^1.6.0
   intl: ^0.20.2
+  liquid_glass_renderer: ^0.2.0-dev.4
   path: ^1.9.1
   path_provider: ^2.1.5
   shared_preferences: ^2.5.4

@@ -143,9 +143,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             if (_isAgreed) {
-                              final existingUser = await UserHelper.getUser(
-                                emailController.text,
-                              );
+                              final existingUser =
+                                  await UserHelper.getUserByEmail(
+                                    emailController.text,
+                                  );
                               if (existingUser != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -157,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 return;
                               }
 
-                              UserHelper.registerUser(
+                              final newUser = await UserHelper.registerUser(
                                 UserModel(
                                   fullName: nameController.text,
                                   email: emailController.text,
@@ -172,11 +173,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                               );
-                              PreferenceHandler.storingEmail(
-                                emailController.text,
-                              );
-                              PreferenceHandler.storingIsLogin(true);
 
+                              PreferenceHandler.saveUserId(newUser);
+                              PreferenceHandler.storingIsLogin(true);
                               context.pushAndRemoveAll(const NavBarGlobal());
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(

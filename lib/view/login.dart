@@ -119,9 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               password: passwordController.text,
                             );
                             if (login != null) {
-                              PreferenceHandler.storingEmail(
-                                emailController.text,
-                              );
+                              await PreferenceHandler.saveUserId(login.id);
                               PreferenceHandler.storingIsLogin(true);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Login sucessful!')),

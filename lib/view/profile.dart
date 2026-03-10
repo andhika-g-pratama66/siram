@@ -31,15 +31,23 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Future<void> _fetchUserData() async {
-    String? email = await PreferenceHandler.getEmail();
-    if (email != null) {
-      UserModel? data = await UserHelper.getUser(email);
+    int? userId = await PreferenceHandler.getUserId();
+    if (userId != null) {
+      UserModel? data = await UserHelper.getUser(userId);
       setState(() {
         _user = data;
         _isLoading = false;
         _notifOff = false;
       });
     }
+  }
+
+  /// Refetches user data and updates the state to show changes
+  Future<void> _refreshUser() async {
+    setState(() {
+      _isLoading = true; // Optional: show loading spinner while refreshing
+    });
+    await _fetchUserData();
   }
 
   @override
@@ -87,8 +95,18 @@ class _MyProfileState extends State<MyProfile> {
                                 trailing: Icon(Icons.chevron_right),
                                 tileColor: Colors.white,
 
-                                onTap: () {
-                                  context.push(EditProfileScreen());
+                                onTap: () async {
+                                  final refresh = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EditProfileScreen(),
+                                    ),
+                                  );
+
+                                  if (refresh == 'refresh') {
+                                    _refreshUser();
+                                  }
                                 },
                               ),
                             ),
@@ -149,7 +167,7 @@ class _MyProfileState extends State<MyProfile> {
                                 ),
                                 subtitle: Text('Securely log out your account'),
                                 onTap: () {
-                                  PreferenceHandler.deleteStoringEmail();
+                                  PreferenceHandler.deleteStoredId();
                                   PreferenceHandler.deleteIsLogin();
                                   context.pushAndRemoveAll(Welcomescreen());
                                 },

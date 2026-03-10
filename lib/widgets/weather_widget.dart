@@ -29,31 +29,43 @@ class LocationDisplay extends StatelessWidget {
           return ElevatedButton(
             style: AppButtonStyles.greenWeather(),
             onPressed: () {},
-            child: Column(
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.location_on),
-                    SizedBox(width: 8),
-                    Text(
-                      cityName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.location_on),
+                          SizedBox(width: 8),
+                          Text(
+                            cityName,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                      Text(
+                        '22°C',
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      '22°C',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.wb_sunny_outlined, size: 48),
+                      Text('Sunny'),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -6,18 +6,24 @@ class PlantModel {
   final String plantName;
   final String category;
   final String? description;
-  final int wateringInterval;
-  final int fertilizingInterval;
-  final String? lastWatered;
+  final int? userId;
+  final int wateringIntervalDays;
+  final int fertilizingIntervalDays;
+  final String lastWatered;
+  final String lastFertilized;
+  final String? harvestAt;
   final String? createdAt;
   PlantModel({
     this.id,
     required this.plantName,
     required this.category,
     this.description,
-    required this.wateringInterval,
-    required this.fertilizingInterval,
-    this.lastWatered,
+    this.userId,
+    required this.wateringIntervalDays,
+    required this.fertilizingIntervalDays,
+    required this.lastWatered,
+    required this.lastFertilized,
+    this.harvestAt,
     this.createdAt,
   });
 
@@ -27,10 +33,13 @@ class PlantModel {
       'plantName': plantName,
       'category': category,
       'description': description,
-      'wateringInterval': wateringInterval,
-      'fertilizingInterval': fertilizingInterval,
+      'userId': userId,
+      'wateringIntervalDays': wateringIntervalDays,
+      'fertilizingIntervalDays': fertilizingIntervalDays,
       'lastWatered': lastWatered,
-      'createdAt': createdAt ?? DateTime.now().toIso8601String(),
+      'lastFertilized': lastFertilized,
+      'harvestAt': harvestAt,
+      'createdAt': createdAt,
     };
   }
 
@@ -42,11 +51,12 @@ class PlantModel {
       description: map['description'] != null
           ? map['description'] as String
           : null,
-      wateringInterval: map['wateringInterval'] as int,
-      fertilizingInterval: map['fertilizingInterval'] as int,
-      lastWatered: map['lastWatered'] != null
-          ? map['lastWatered'] as String
-          : null,
+      userId: map['userId'] != null ? map['userId'] as int : null,
+      wateringIntervalDays: map['wateringIntervalDays'] as int,
+      fertilizingIntervalDays: map['fertilizingIntervalDays'] as int,
+      lastWatered: map['lastWatered'] as String,
+      lastFertilized: map['lastFertilized'] as String,
+      harvestAt: map['harvestAt'] != null ? map['harvestAt'] as String : null,
       createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
     );
   }
@@ -55,4 +65,33 @@ class PlantModel {
 
   factory PlantModel.fromJson(String source) =>
       PlantModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  int get daysUntilWatering {
+    DateTime lastDate = DateTime.parse(lastWatered); // Parse string to DateTime
+    DateTime nextDate = lastDate.add(Duration(days: wateringIntervalDays));
+
+    return nextDate.difference(DateTime.now()).inDays;
+  }
+
+  int get daysUntilFertilizing {
+    DateTime lastDate = DateTime.parse(
+      lastFertilized,
+    ); // Parse string to DateTime
+    DateTime nextDate = lastDate.add(Duration(days: fertilizingIntervalDays));
+
+    return nextDate.difference(DateTime.now()).inDays;
+  }
+
+  // Inside your PlantModel class
+  bool get needsWatering {
+    final last = DateTime.parse(lastWatered);
+    final next = last.add(Duration(days: wateringIntervalDays));
+    return DateTime.now().isAfter(next);
+  }
+
+  bool get needsFertilizing {
+    final last = DateTime.parse(lastFertilized);
+    final next = last.add(Duration(days: fertilizingIntervalDays));
+    return DateTime.now().isAfter(next);
+  }
 }

@@ -9,18 +9,20 @@ class DBHelper {
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE plants (
-            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INTEGER, 
             plantName TEXT, 
             description TEXT, 
             category TEXT, 
             wateringIntervalDays INTEGER, 
-            fertilizingIntervalDays INTEGER
-            lastWatered TEXT
-            createdAt TEXT
-            FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+            fertilizingIntervalDays INTEGER,
+            lastWatered TEXT,
+            lastFertilized TEXT,
+            harvestAt TEXT,
+            createdAt TEXT,
+            FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
           )
         ''');
-
         await db.execute('''
           CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 

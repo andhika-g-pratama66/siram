@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceHandler {
@@ -9,7 +11,7 @@ class PreferenceHandler {
 
   //Key user
   static const String _isLogin = 'isLogin';
-  static const String _userEmail = 'user_email';
+  static const String _userIdKey = 'user_id';
 
   //CREATE
   static Future<void> storingIsLogin(bool isLogin) async {
@@ -25,22 +27,21 @@ class PreferenceHandler {
     return data;
   }
 
-  //Store Email
-  static Future<void> storingEmail(String email) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_email', email);
+  static Future<int?> getUserId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_userIdKey);
   }
 
-  //Get Email
-  static Future<String?> getEmail() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('user_email');
+  // Save User ID
+  static Future<void> saveUserId(int? id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_userIdKey, id!);
   }
 
-  //Delete Storing Email
-  static Future<void> deleteStoringEmail() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_userEmail);
+  // Delete Storing ID
+  static Future<void> deleteStoredId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_userIdKey);
   }
 
   //DELETE

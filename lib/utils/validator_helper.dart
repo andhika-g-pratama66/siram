@@ -45,4 +45,34 @@ class ValidatorHelper {
 
     return null;
   }
+
+  String? validateWatering(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a number';
+    }
+
+    // Matches exactly one character that is a digit from 1 to 7
+    final rangeRegExp = RegExp(r'^[0-9]{1,3}$');
+
+    if (!rangeRegExp.hasMatch(value)) {
+      return 'Please enter a number between 1 and 7';
+    }
+
+    return null;
+  }
+
+  String? validateAnyNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a number';
+    }
+
+    // Matches exactly one character that is a digit from 1 to 7
+    final rangeRegExp = RegExp(r'^[0-9]{1,3}$');
+
+    if (!rangeRegExp.hasMatch(value)) {
+      return 'Please enter numeric alphabet';
+    }
+
+    return null;
+  }
 }

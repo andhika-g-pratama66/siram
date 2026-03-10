@@ -27,6 +27,22 @@ class AppButtonStyles {
     );
   }
 
+  static ButtonStyle alertRed() {
+    return ElevatedButton.styleFrom(
+      side: const BorderSide(color: AppColor.alertRed),
+      foregroundColor: AppColor.alertRed,
+      shape: _baseShape,
+    );
+  }
+
+  static ButtonStyle alertGreen() {
+    return ElevatedButton.styleFrom(
+      side: const BorderSide(color: AppColor.baseGreen),
+      foregroundColor: AppColor.baseGreen,
+      shape: _baseShape,
+    );
+  }
+
   ///Solid Green
   static ButtonStyle solidGreen() {
     return ElevatedButton.styleFrom(

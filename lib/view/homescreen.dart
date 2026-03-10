@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:nandur_id/constants/color_const.dart';
+import 'package:nandur_id/database/plant_helper.dart';
 
 import 'package:nandur_id/database/preference.dart';
 
 import 'package:nandur_id/database/user_helper.dart';
+import 'package:nandur_id/models/plant_model.dart';
 import 'package:nandur_id/models/user_model.dart';
 import 'package:nandur_id/widgets/garden_widget.dart';
 import 'package:nandur_id/widgets/weather_widget.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -18,6 +21,7 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   UserModel? _user;
   bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -25,13 +29,25 @@ class _HomescreenState extends State<Homescreen> {
   }
 
   Future<void> _fetchUserData() async {
-    String? email = await PreferenceHandler.getEmail();
-    if (email != null) {
-      UserModel? data = await UserHelper.getUser(email);
-      setState(() {
-        _user = data;
-        _isLoading = false;
-      });
+    try {
+      int? id = await PreferenceHandler.getUserId();
+
+      if (id == null) {
+        if (mounted) setState(() => _isLoading = false);
+        return;
+      }
+
+      UserModel? data = await UserHelper.getUser(id);
+
+      if (mounted) {
+        setState(() {
+          _user = data;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error fetching user: $e");
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -53,7 +69,27 @@ class _HomescreenState extends State<Homescreen> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [SizedBox(height: 20), GardenWidget()],
+                  children: [
+                    SizedBox(height: 351, child: GardenWidget(itemCount: 3)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TableCalendar(
+                        calendarStyle: CalendarStyle(
+                          tablePadding: EdgeInsets.all(8),
+                        ),
+                        focusedDay: DateTime.now(),
+                        firstDay: DateTime(2000),
+                        lastDay: DateTime(2050),
+                        calendarFormat: CalendarFormat.week,
+                        // headerVisible: false,
+                        headerStyle: HeaderStyle(
+                          formatButtonVisible: false,
+                          titleCentered: true,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
               ],
             ),
