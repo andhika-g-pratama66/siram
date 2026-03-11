@@ -6,7 +6,7 @@ import 'package:nandur_id/constants/button_style.dart';
 
 import 'package:nandur_id/constants/form_decoration.dart';
 import 'package:nandur_id/database/preference.dart';
-import 'package:nandur_id/database/sqflite.dart';
+
 import 'package:nandur_id/database/user_helper.dart';
 import 'package:nandur_id/models/user_model.dart';
 import 'package:nandur_id/utils/navigator.dart';

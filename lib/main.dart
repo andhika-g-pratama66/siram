@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:nandur_id/view/splashscreen.dart';
-import 'package:nandur_id/widgets/bottom_navbar.dart';
 
 void main() {
   runApp(const MainApp());

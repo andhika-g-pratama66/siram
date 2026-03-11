@@ -43,6 +43,35 @@ class PlantModel {
     };
   }
 
+  PlantModel copyWith({
+    int? id,
+    String? plantName,
+    String? category,
+    String? description,
+    int? userId,
+    int? wateringIntervalDays,
+    int? fertilizingIntervalDays,
+    String? lastWatered,
+    String? lastFertilized,
+    String? harvestAt,
+    String? createdAt,
+  }) {
+    return PlantModel(
+      id: id ?? this.id,
+      plantName: plantName ?? this.plantName,
+      category: category ?? this.category,
+      description: description ?? this.description,
+      userId: userId ?? this.userId,
+      wateringIntervalDays: wateringIntervalDays ?? this.wateringIntervalDays,
+      fertilizingIntervalDays:
+          fertilizingIntervalDays ?? this.fertilizingIntervalDays,
+      lastWatered: lastWatered ?? this.lastWatered,
+      lastFertilized: lastFertilized ?? this.lastFertilized,
+      harvestAt: harvestAt ?? this.harvestAt,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
   factory PlantModel.fromMap(Map<String, dynamic> map) {
     return PlantModel(
       id: map['id'] != null ? map['id'] as int : null,

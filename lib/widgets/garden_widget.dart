@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nandur_id/constants/button_style.dart';
 import 'package:nandur_id/constants/color_const.dart';
+import 'package:nandur_id/constants/form_decoration.dart';
 import 'package:nandur_id/database/plant_helper.dart';
 import 'package:nandur_id/database/preference.dart';
 import 'package:nandur_id/models/plant_model.dart';
@@ -28,6 +29,7 @@ class GardenWidget extends StatefulWidget {
 }
 
 class _GardenWidgetState extends State<GardenWidget> {
+  DateTime? harvestTime;
   late Future<List<PlantModel>> _plantsFuture;
 
   @override
@@ -291,7 +293,7 @@ class _GardenWidgetState extends State<GardenWidget> {
           actions: [
             TextButton(
               onPressed: () {
-                customDialog(context);
+                customDialog(context, plant);
               },
               child: Text('Edit'),
             ),
@@ -310,48 +312,134 @@ class _GardenWidgetState extends State<GardenWidget> {
     );
   }
 
-  Future<Object?> customDialog(BuildContext context) {
-    return showGeneralDialog(
+  Future<void> customDialog(BuildContext context, PlantModel plant) async {
+    final nameController = TextEditingController(text: plant.plantName);
+    final waterController = TextEditingController(
+      text: plant.wateringIntervalDays.toString(),
+    );
+    final fertilizingController = TextEditingController(
+      text: plant.fertilizingIntervalDays.toString(),
+    );
+
+    String displayDate = '';
+    if (plant.harvestAt != null) {
+      displayDate = DateFormat.yMMMd().format(DateTime.parse(plant.harvestAt!));
+    }
+
+    final harvestDateController = TextEditingController(text: displayDate);
+
+    String isoHarvestDate = plant.harvestAt ?? '';
+
+    final PlantModel? updatedResult = await showGeneralDialog<PlantModel>(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Dismiss',
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, anim1, anim2) {
-        double screenHeight = MediaQuery.of(context).size.height;
-        return Dialog(
-          alignment: AlignmentGeometry.bottomCenter,
-          insetPadding: const EdgeInsets.only(
-            top: 20,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          ),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: SizedBox(
-            height: screenHeight * 0.75,
-            width: double.infinity,
-            child: const Center(child: Text("Your Content Here")),
-          ),
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return SlideTransition(
-          position:
-              Tween<Offset>(
-                begin: const Offset(0, 1),
-                end: const Offset(0, 0),
-              ).animate(
-                CurvedAnimation(
-                  parent: anim1,
-                  curve: Curves.easeOutCubic, // Smooth deceleration
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Dialog(
+              alignment: Alignment.bottomCenter,
+              insetPadding: const EdgeInsets.all(0),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Edit ${plant.plantName}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      TextFormField(
+                        controller: nameController,
+                        decoration: formInputConstant(labelText: 'Plant Name'),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: waterController,
+                        decoration: formInputConstant(
+                          labelText: 'Watering Interval (Days)',
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: fertilizingController,
+                        decoration: formInputConstant(
+                          labelText: 'Fertilizing Interval (Days)',
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      TextFormField(
+                        controller: harvestDateController,
+                        readOnly: true,
+                        decoration: formInputConstant(
+                          labelText: 'Harvest Date',
+                        ),
+                        onTap: () async {
+                          DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate:
+                                DateTime.tryParse(isoHarvestDate) ??
+                                DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2050),
+                          );
+
+                          if (picked != null) {
+                            setDialogState(() {
+                              isoHarvestDate = picked.toIso8601String();
+
+                              harvestDateController.text = DateFormat.yMMMd()
+                                  .format(picked);
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 24),
+
+                      ElevatedButton(
+                        style: AppButtonStyles.solidGreen(),
+                        onPressed: () {
+                          final updatedPlant = plant.copyWith(
+                            plantName: nameController.text,
+                            wateringIntervalDays:
+                                int.tryParse(waterController.text) ??
+                                plant.wateringIntervalDays,
+                            fertilizingIntervalDays:
+                                int.tryParse(fertilizingController.text) ??
+                                plant.fertilizingIntervalDays,
+                            harvestAt: isoHarvestDate, // Save the ISO string
+                          );
+                          Navigator.pop(context, updatedPlant);
+                        },
+                        child: const Text('Update Plant'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-          child: child,
+            );
+          },
         );
       },
     );
+
+    // 2. Logic to save to DB
+    if (updatedResult != null) {
+      await PlantHelper.updatePlant(updatedResult);
+      _refreshPlants();
+      if (context.mounted) Navigator.pop(context); // Close description dialog
+    }
   }
 
   Future<dynamic> deleteDialog(BuildContext context, PlantModel plant) {
@@ -372,11 +460,6 @@ class _GardenWidgetState extends State<GardenWidget> {
           actionsAlignment:
               MainAxisAlignment.spaceEvenly, // Balances the buttons
           actions: [
-            TextButton(
-              // style: AppButtonStyles.ghostGreen(),
-              onPressed: () => Navigator.of(context).pop(), // Closes the dialog
-              child: const Text('Cancel'),
-            ),
             ElevatedButton(
               style: AppButtonStyles.ghostRed(),
               onPressed: () async {
@@ -385,6 +468,10 @@ class _GardenWidgetState extends State<GardenWidget> {
                 await _handleDelete(plant.id!);
               },
               child: const Text('Harvest'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(), // Closes the dialog
+              child: const Text('Cancel'),
             ),
           ],
         );

@@ -1,6 +1,5 @@
 import 'package:nandur_id/database/sqflite.dart';
 import 'package:nandur_id/models/plant_model.dart';
-import 'package:sqflite/sqflite.dart';
 
 class PlantHelper {
   static Future<int> createPlant(PlantModel plant) async {
