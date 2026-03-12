@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nandur_id/constants/button_style.dart';
@@ -88,6 +89,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
       createdAt: plantingDate.toIso8601String(),
       lastFertilized: plantingDate.toIso8601String(),
       lastWatered: plantingDate.toIso8601String(),
+      isHarvested: 0,
     );
 
     await PlantHelper.createPlant(newPlant);
@@ -110,165 +112,172 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
           child: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUnfocus,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Add Plant to Your Garden', style: DefaultFont.header),
-                SizedBox(height: 20),
-                Text('Plant Name', style: DefaultFont.body),
-                SizedBox(height: 4),
-                TextFormField(
-                  controller: _nameController,
-                  decoration: formInputConstant(
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'e.g. Tomato, Carrot, Daisy',
+            child: FadeInRight(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Add Plant to Your Garden', style: DefaultFont.header),
+                  SizedBox(height: 20),
+                  Text('Plant Name', style: DefaultFont.body),
+                  SizedBox(height: 4),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your plant name';
+                      }
+                      return null;
+                    },
+                    controller: _nameController,
+                    decoration: formInputConstant(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'e.g. Tomato, Carrot, Daisy',
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Text('When did you plant it?', style: DefaultFont.body),
-                SizedBox(height: 4),
-                TextFormField(
-                  controller: _dateController,
-                  readOnly: true,
-                  decoration: formInputConstant(
-                    filled: true,
-                    fillColor: Colors.white,
-                    suffixIconData: Icon(Icons.calendar_month),
-                    hintText: 'DD/MM/YYYY',
+                  SizedBox(height: 20),
+                  Text('When did you plant it?', style: DefaultFont.body),
+                  SizedBox(height: 4),
+                  TextFormField(
+                    controller: _dateController,
+                    readOnly: true,
+                    decoration: formInputConstant(
+                      filled: true,
+                      fillColor: Colors.white,
+                      suffixIconData: Icon(Icons.calendar_month),
+                      hintText: 'DD/MM/YYYY',
+                    ),
+
+                    onTap: () {
+                      _selectDate(context);
+                    },
                   ),
+                  SizedBox(height: 20),
+                  Text('What type of plant is it? ', style: DefaultFont.body),
+                  SizedBox(height: 4),
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 1.5,
 
-                  onTap: () {
-                    _selectDate(context);
-                  },
-                ),
-                SizedBox(height: 20),
-                Text('What type of plant is it? ', style: DefaultFont.body),
-                SizedBox(height: 4),
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  childAspectRatio: 1.5,
-
-                  children: [
-                    _buildGridItem(
-                      'Vegetables',
-                      'assets/icons/carrot.png',
-                      AppColor.baseGreen,
-                    ),
-                    _buildGridItem(
-                      'Herbs',
-                      'assets/icons/mortar.png',
-                      AppColor.baseGreen,
-                    ),
-                    _buildGridItem(
-                      'Flowers',
-                      'assets/icons/sunflower.png',
-                      AppColor.baseGreen,
-                    ),
-                    _buildGridItem(
-                      'Fruits',
-                      'assets/icons/fruits.png',
-                      AppColor.baseGreen,
-                    ),
-                    _buildGridItem(
-                      'Succulents',
-                      'assets/icons/cactus.png',
-                      AppColor.baseGreen,
-                    ),
-                    _buildGridItem(
-                      'Trees',
-                      'assets/icons/tree.png',
-                      AppColor.baseGreen,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Add description about your plant',
-                  style: DefaultFont.body,
-                ),
-                SizedBox(height: 4),
-                TextFormField(
-                  controller: _descriptionController,
-                  minLines: 3,
-                  maxLength: 200,
-                  maxLines: 5,
-                  decoration: formInputConstant(
-                    hintText: ' ',
-                    filled: true,
-                    fillColor: Colors.white,
+                    children: [
+                      _buildGridItem(
+                        'Vegetables',
+                        'assets/icons/carrot.png',
+                        AppColor.baseGreen,
+                      ),
+                      _buildGridItem(
+                        'Herbs',
+                        'assets/icons/mortar.png',
+                        AppColor.baseGreen,
+                      ),
+                      _buildGridItem(
+                        'Flowers',
+                        'assets/icons/sunflower.png',
+                        AppColor.baseGreen,
+                      ),
+                      _buildGridItem(
+                        'Fruits',
+                        'assets/icons/fruits.png',
+                        AppColor.baseGreen,
+                      ),
+                      _buildGridItem(
+                        'Succulents',
+                        'assets/icons/cactus.png',
+                        AppColor.baseGreen,
+                      ),
+                      _buildGridItem(
+                        'Trees',
+                        'assets/icons/tree.png',
+                        AppColor.baseGreen,
+                      ),
+                    ],
                   ),
-                ),
-
-                SizedBox(height: 20),
-                Text('How often does it need water? ', style: DefaultFont.body),
-                SizedBox(height: 4),
-                TextFormField(
-                  validator: (value) {
-                    return _validator.validateWatering(value);
-                  },
-                  decoration: formInputConstant(
-                    labelText: 'e.g. 7 ',
-                    filled: true,
-                    fillColor: Colors.white,
-                    prefixText: 'Once every ',
-                    suffixText: 'day(s)',
+                  SizedBox(height: 20),
+                  Text(
+                    'Add description about your plant',
+                    style: DefaultFont.body,
+                  ),
+                  SizedBox(height: 4),
+                  TextFormField(
+                    controller: _descriptionController,
+                    minLines: 3,
+                    maxLength: 200,
+                    maxLines: 5,
+                    decoration: formInputConstant(
+                      hintText: ' ',
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
                   ),
 
-                  controller: _wateringController,
-                  keyboardType: TextInputType.number,
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'How often does it need fertilizer? ',
-                  style: DefaultFont.body,
-                ),
-                SizedBox(height: 4),
-                TextFormField(
-                  validator: (value) {
-                    return _validator.validateAnyNumber(value);
-                  },
-                  decoration: formInputConstant(
-                    filled: true,
-                    hintText: 'e.g, 40',
-                    fillColor: Colors.white,
-                    suffixText: 'Days',
-                  ),
+                  SizedBox(height: 20),
 
-                  controller: _fertilizeController,
-                  keyboardType: TextInputType.number,
-                ),
-                SizedBox(height: 20),
-                Text('Days to Harvest', style: DefaultFont.body),
-                SizedBox(height: 4),
-                TextFormField(
-                  validator: (value) {
-                    return _validator.validateAnyNumber(value);
-                  },
-                  decoration: formInputConstant(
-                    filled: true,
-                    hintText: 'e.g, 90',
-                    fillColor: Colors.white,
-                    suffixText: 'Days',
-                  ),
+                  SizedBox(height: 4),
+                  TextFormField(
+                    validator: (value) {
+                      return _validator.validateWatering(value);
+                    },
+                    decoration: formInputConstant(
+                      prefixWidget: Text('Once every '),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'How often does it need water? ',
+                      suffixText: 'day(s)',
+                    ),
 
-                  controller: _harvestingController,
-                  keyboardType: TextInputType.number,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  style: AppButtonStyles.solidGreen(),
-                  onPressed: () {
-                    _savePlant();
-                  },
-                  child: Text('Add Plant'),
-                ),
-              ],
+                    controller: _wateringController,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 20),
+
+                  SizedBox(height: 4),
+                  TextFormField(
+                    validator: (value) {
+                      return _validator.validateAnyNumber(value);
+                    },
+                    decoration: formInputConstant(
+                      prefixWidget: Text('Once every '),
+                      filled: true,
+                      labelText: 'How often does it need fertilizer? ',
+                      fillColor: Colors.white,
+                      suffixText: 'Days',
+                    ),
+
+                    controller: _fertilizeController,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 20),
+
+                  SizedBox(height: 4),
+                  TextFormField(
+                    validator: (value) {
+                      return _validator.validateAnyNumber(value);
+                    },
+                    decoration: formInputConstant(
+                      filled: true,
+                      labelText: 'Days to Harvest',
+                      fillColor: Colors.white,
+                      suffixText: 'Days',
+                    ),
+
+                    controller: _harvestingController,
+
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    style: AppButtonStyles.solidGreen(),
+                    onPressed: () {
+                      _savePlant();
+                    },
+                    child: Text('Add Plant'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -284,7 +293,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? activeColor.withOpacity(0.1) : Colors.white,
+          color: isSelected ? activeColor.withValues(alpha: 0.1) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? activeColor : Colors.grey[300]!,

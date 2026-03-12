@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nandur_id/constants/button_style.dart';
@@ -123,58 +124,60 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(title: const Text('Edit Profile')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              // Added scroll view to prevent overflow
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  const CircleAvatar(
-                    radius: 60,
-                    child: Icon(Icons.person, size: 70),
-                  ),
-                  const SizedBox(height: 30),
+          : FadeInRight(
+              child: SingleChildScrollView(
+                // Added scroll view to prevent overflow
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    const CircleAvatar(
+                      radius: 60,
+                      child: Icon(Icons.person, size: 70),
+                    ),
+                    const SizedBox(height: 30),
 
-                  // Name Field
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: formInputConstant(labelText: 'Full Name'),
-                  ),
-                  const SizedBox(height: 20),
+                    // Name Field
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: formInputConstant(labelText: 'Full Name'),
+                    ),
+                    const SizedBox(height: 20),
 
-                  // DOB Field
-                  TextFormField(
-                    controller: _dobController,
-                    readOnly: true,
-                    onTap: () => _selectDate(context),
-                    decoration: formInputConstant(
-                      labelText: 'Date of Birth',
-                    ).copyWith(suffixIcon: const Icon(Icons.calendar_today)),
-                  ),
-                  const SizedBox(height: 20),
+                    // DOB Field
+                    TextFormField(
+                      controller: _dobController,
+                      readOnly: true,
+                      onTap: () => _selectDate(context),
+                      decoration: formInputConstant(
+                        labelText: 'Date of Birth',
+                      ).copyWith(suffixIcon: const Icon(Icons.calendar_today)),
+                    ),
+                    const SizedBox(height: 20),
 
-                  // Gender Dropdown
-                  DropdownButtonFormField<String>(
-                    items: _genderOptions.map((String category) {
-                      return DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() => _selectedGender = newValue);
-                    },
-                    decoration: formInputConstant(labelText: 'Gender'),
-                  ),
+                    // Gender Dropdown
+                    DropdownButtonFormField<String>(
+                      items: _genderOptions.map((String category) {
+                        return DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() => _selectedGender = newValue);
+                      },
+                      decoration: formInputConstant(labelText: 'Gender'),
+                    ),
 
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    style: AppButtonStyles.solidGreen(),
-                    onPressed: () async {
-                      await _handleSave();
-                    },
-                    child: const Text("Save Changes"),
-                  ),
-                ],
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      style: AppButtonStyles.solidGreen(),
+                      onPressed: () async {
+                        await _handleSave();
+                      },
+                      child: const Text("Save Changes"),
+                    ),
+                  ],
+                ),
               ),
             ),
     );

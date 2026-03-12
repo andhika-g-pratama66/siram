@@ -20,6 +20,7 @@ class DBHelper {
             lastFertilized TEXT,
             harvestAt TEXT,
             createdAt TEXT,
+            isHarvested INTEGER DEFAULT 0,  
             FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
           )
         ''');

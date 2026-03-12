@@ -1,4 +1,7 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:nandur_id/constants/color_const.dart';
+import 'package:nandur_id/constants/default_font.dart';
 import 'package:nandur_id/database/plant_helper.dart';
 import 'package:nandur_id/database/preference.dart';
 import 'package:nandur_id/models/plant_model.dart';
@@ -48,6 +51,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _events.clear();
 
     for (final plant in _plants) {
+      if (plant.isHarvested == 1) {
+        continue;
+      }
       _addTask(
         plant.plantName,
         plant.lastWatered,
@@ -68,7 +74,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final last = DateTime.tryParse(lastDateStr);
     if (last == null) return;
 
-    for (int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= 30; i++) {
       final date = _normalize(last.add(Duration(days: interval * i)));
 
       _events.putIfAbsent(date, () => []);
@@ -85,97 +91,128 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final selectedEvents = _getEventsForDay(_selectedDay);
 
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          /// Calendar
-          TableCalendar(
-            focusedDay: _focusedDay,
-            firstDay: DateTime(2000),
-            lastDay: DateTime(2050),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: FadeIn(
+        child: Column(
+          children: [
+            /// Calendar
+            TableCalendar(
+              focusedDay: _focusedDay,
+              firstDay: DateTime(2000),
+              lastDay: DateTime(2050),
 
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              // availableGestures: AvailableGestures.verticalSwipe,
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false,
+                leftChevronVisible: false,
+                rightChevronVisible: false,
+                titleCentered: true,
+                titleTextStyle: DefaultFont.header,
+                headerMargin: EdgeInsets.only(bottom: 8),
+              ),
+              calendarStyle: CalendarStyle(
+                selectedDecoration: BoxDecoration(
+                  color: AppColor.baseGreen,
+                  shape: BoxShape.circle,
+                ),
 
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            },
+                selectedTextStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
 
-            eventLoader: _getEventsForDay,
+                todayDecoration: BoxDecoration(
+                  color: AppColor.baseGreen.withValues(alpha: 0.5),
+                  shape: BoxShape.circle,
+                ),
+              ),
 
-            calendarBuilders: CalendarBuilders(
-              markerBuilder: (context, date, events) {
-                if (events.isEmpty) return const SizedBox();
+              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
 
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: events.take(3).map((event) {
-                    final isWater = event.toString().contains("Water");
-
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 1),
-                      width: 7,
-                      height: 7,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isWater ? Colors.blue : Colors.orange,
-                      ),
-                    );
-                  }).toList(),
-                );
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
               },
-            ),
-          ),
 
-          const SizedBox(height: 10),
+              eventLoader: _getEventsForDay,
 
-          /// Task Header
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Tasks for ${_selectedDay.day}/${_selectedDay.month}/${_selectedDay.year}",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-          ),
+              calendarBuilders: CalendarBuilders(
+                markerBuilder: (context, date, events) {
+                  if (events.isEmpty) return const SizedBox();
 
-          const SizedBox(height: 6),
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: events.take(3).map((event) {
+                      final isWater = event.toString().contains("Water");
 
-          /// Task List
-          if (selectedEvents.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(20),
-              child: Text("No gardening tasks today! 🎉"),
-            )
-          else
-            Expanded(
-              child: ListView.builder(
-                itemCount: selectedEvents.length,
-                itemBuilder: (context, index) {
-                  final event = selectedEvents[index];
-                  final isWater = event.contains("Water");
-
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 4,
-                    ),
-                    child: ListTile(
-                      leading: Icon(
-                        isWater ? Icons.water_drop : Icons.eco,
-                        color: isWater ? Colors.blue : Colors.orange,
-                      ),
-                      title: Text(event),
-                      subtitle: const Text(
-                        "Don't forget to take care of your plant!",
-                      ),
-                    ),
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 1),
+                        width: 7,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isWater ? Colors.blue : Colors.orange,
+                        ),
+                      );
+                    }).toList(),
                   );
                 },
               ),
             ),
-        ],
+
+            const SizedBox(height: 32),
+
+            /// Task Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "Tasks for ${_selectedDay.day}/${_selectedDay.month}/${_selectedDay.year}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            /// Task List
+            if (selectedEvents.isEmpty)
+              const Padding(
+                padding: EdgeInsets.all(20),
+                child: Text("No gardening task today! "),
+              )
+            else
+              Expanded(
+                child: ListView.builder(
+                  itemCount: selectedEvents.length,
+                  itemBuilder: (context, index) {
+                    final event = selectedEvents[index];
+                    final isWater = event.contains("Water");
+
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      child: ListTile(
+                        leading: Icon(
+                          isWater ? Icons.water_drop : Icons.eco,
+                          color: isWater ? Colors.blue : Colors.orange,
+                        ),
+                        title: Text(event),
+                        subtitle: const Text(
+                          "Don't forget to take care of your plant!",
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

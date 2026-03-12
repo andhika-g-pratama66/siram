@@ -55,7 +55,7 @@ class ValidatorHelper {
     final rangeRegExp = RegExp(r'^[0-9]{1,3}$');
 
     if (!rangeRegExp.hasMatch(value)) {
-      return 'Please enter a number between 1 and 7';
+      return 'Please enter valid number';
     }
 
     return null;

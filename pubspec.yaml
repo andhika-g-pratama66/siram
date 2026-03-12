@@ -7,10 +7,13 @@ environment:
   sdk: ^3.10.8
 
 dependencies:
+  animate_do: ^4.2.0
+  animations: ^2.1.1
   crypto: ^3.0.7
   flutter:
     sdk: flutter
   # flutter_local_notifications: ^20.1.0
+  flutter_launcher_icons: ^0.14.4
   font_awesome_flutter: ^11.0.0
   geocoding: ^4.0.0
   geolocator: ^14.0.2
@@ -18,6 +21,7 @@ dependencies:
   http: ^1.6.0
   intl: ^0.20.2
   liquid_glass_renderer: ^0.2.0-dev.4
+  lottie: ^3.3.2
   path: ^1.9.1
   path_provider: ^2.1.5
   shared_preferences: ^2.5.4
@@ -31,8 +35,18 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/nandur_logo.png"
+  min_sdk_android: 21 
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logo/nandur_logo.png"
+
 flutter:
   uses-material-design: true
   assets:
     # - assets/images/
     - assets/icons/
+    - assets/logo/
+    - assets/lottie/

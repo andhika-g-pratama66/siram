@@ -36,7 +36,7 @@ class _NavBarGlobalState extends State<NavBarGlobal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: appBarColorOptions[_selectedIndex]),
-      body: Center(child: widgetOptions.elementAt(_selectedIndex)),
+      body: widgetOptions.elementAt(_selectedIndex),
 
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nandur_id/constants/color_const.dart';
+
 import 'package:nandur_id/database/preference.dart';
 import 'package:nandur_id/utils/navigator.dart';
-import 'package:nandur_id/view/homescreen.dart';
-import 'package:nandur_id/view/login.dart';
+
 import 'package:nandur_id/view/welcome.dart';
 import 'package:nandur_id/widgets/bottom_navbar.dart';
 
@@ -26,15 +25,23 @@ class _SplashscreenState extends State<Splashscreen> {
     bool? data = await PreferenceHandler.getIsLogin();
 
     if (data == true) {
-      context.pushAndRemoveAll(NavBarGlobal());
+      if (mounted) {
+        context.pushAndRemoveAll(NavBarGlobal());
+      }
     } else {
-      context.pushAndRemoveAll(Welcomescreen());
+      if (mounted) {
+        context.pushAndRemoveAll(Welcomescreen());
+      }
     }
   }
 
-  // TODO: DESIGN THE SPLASH
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: AppColor.baseGreen, body: Center());
+    return Scaffold(
+      backgroundColor: Color(0xfffafcf1),
+      body: Center(
+        child: Image.asset('assets/logo/nandur_logo1.png', width: 300),
+      ),
+    );
   }
 }

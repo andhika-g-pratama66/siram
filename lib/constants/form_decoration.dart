@@ -4,9 +4,10 @@ import 'package:nandur_id/constants/default_font.dart';
 
 InputDecoration formInputConstant({
   String? hintText,
-  Icon? prefixIconData,
+  Widget? prefixIconData,
+  Widget? prefixWidget,
   String? labelText,
-  Icon? suffixIconData,
+  Widget? suffixIconData,
   Color? fillColor,
   bool? filled,
   String? suffixText,
@@ -25,7 +26,9 @@ InputDecoration formInputConstant({
     errorMaxLines: 3,
     floatingLabelBehavior: FloatingLabelBehavior.auto,
     fillColor: fillColor,
-
+    prefixIconConstraints: BoxConstraints(maxWidth: 150),
+    prefixStyle: TextStyle(),
+    prefix: prefixWidget,
     // focusedBorder: OutlineInputBorder(
     //   borderSide: BorderSide(color: AppColor.baseGreen, width: 2),
     //   borderRadius: BorderRadius.circular(32),

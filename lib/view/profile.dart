@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 import 'package:nandur_id/constants/color_const.dart';
@@ -10,6 +11,7 @@ import 'package:nandur_id/models/user_model.dart';
 import 'package:nandur_id/utils/navigator.dart';
 import 'package:nandur_id/view/change_password.dart';
 import 'package:nandur_id/view/edit_profile.dart';
+import 'package:nandur_id/view/garden_history.dart';
 
 import 'package:nandur_id/view/welcome.dart';
 
@@ -23,7 +25,7 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   UserModel? _user;
   bool _isLoading = true;
-  bool _notifOff = false;
+  // bool _notifOff = false;
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,7 @@ class _MyProfileState extends State<MyProfile> {
       setState(() {
         _user = data;
         _isLoading = false;
-        _notifOff = false;
+        // _notifOff = false;
       });
     }
   }
@@ -59,126 +61,177 @@ class _MyProfileState extends State<MyProfile> {
         : SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: ListView(
-                children: [
-                  ListTile(
-                    leading: CircleAvatar(child: Icon(Icons.person_2)),
-                    title: Text(_user!.fullName),
-                    subtitle: Text(_user!.email),
-                    tileColor: Colors.white,
-                    shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(10),
+              child: FadeIn(
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: CircleAvatar(child: Icon(Icons.person_2)),
+                      title: Text(_user!.fullName),
+                      subtitle: Text(_user!.email),
+                      tileColor: Colors.white,
+                      shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Column(
-                    children: [
-                      ///Edit Profile
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            Material(
-                              child: ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.vertical(
-                                    top: Radius.circular(20),
-                                  ),
-                                ),
-                                leading: Icon(Icons.person_2),
-                                dense: true,
-                                title: Text('Edit Profile'),
-                                subtitle: Text('Change profile picture, email'),
-                                trailing: Icon(Icons.chevron_right),
-                                tileColor: Colors.white,
-
-                                onTap: () async {
-                                  final refresh = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EditProfileScreen(),
+                    SizedBox(height: 20),
+                    Column(
+                      children: [
+                        ///Edit Profile
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            children: [
+                              Material(
+                                child: ListTile(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadiusGeometry.vertical(
+                                      top: Radius.circular(20),
                                     ),
-                                  );
+                                  ),
+                                  leading: Icon(Icons.person_2),
+                                  dense: true,
+                                  title: Text('Edit Profile'),
+                                  subtitle: Text(
+                                    'Change profile picture, email',
+                                  ),
+                                  trailing: Icon(Icons.chevron_right),
+                                  tileColor: Colors.white,
 
-                                  if (refresh == 'refresh') {
-                                    _refreshUser();
-                                  }
-                                },
-                              ),
-                            ),
+                                  onTap: () async {
+                                    final refresh = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const EditProfileScreen(),
+                                      ),
+                                    );
 
-                            ///Change Password
-                            Material(
-                              child: ListTile(
-                                dense: true,
-                                leading: Icon(Icons.lock),
-                                title: Text('Change Password'),
-                                subtitle: Text('Update your account security'),
-                                trailing: Icon(Icons.chevron_right),
-                                tileColor: Colors.white,
-                                onTap: () {
-                                  context.push(ChangePasswordScreen());
-                                },
-                              ),
-                            ),
-
-                            //Notif
-                            Material(
-                              child: ListTile(
-                                dense: true,
-                                leading: Icon(Icons.notifications_active),
-                                title: Text('Notification'),
-                                subtitle: Text(
-                                  'Push alerts for scheduled plant care',
-                                ),
-                                trailing: Switch(
-                                  value: _notifOff,
-                                  onChanged: (bool newValue) {
-                                    setState(() {
-                                      _notifOff = newValue;
-                                    });
+                                    if (refresh == 'refresh') {
+                                      _refreshUser();
+                                    }
                                   },
                                 ),
-                                tileColor: Colors.white,
                               ),
-                            ),
 
-                            //Logout
-                            Material(
-                              child: ListTile(
-                                dense: true,
-                                tileColor: Colors.white,
-                                titleTextStyle: TextStyle(
-                                  color: AppColor.alertRed,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.vertical(
-                                    bottom: Radius.circular(20),
+                              ///Change Password
+                              Material(
+                                child: ListTile(
+                                  dense: true,
+                                  leading: Icon(Icons.lock),
+                                  title: Text('Change Password'),
+                                  subtitle: Text(
+                                    'Update your account security',
                                   ),
+                                  trailing: Icon(Icons.chevron_right),
+                                  tileColor: Colors.white,
+                                  onTap: () {
+                                    context.push(ChangePasswordScreen());
+                                  },
                                 ),
-                                title: Text('Log Out'),
-                                leading: Icon(
-                                  Icons.logout,
-                                  color: AppColor.alertRed,
-                                ),
-                                subtitle: Text('Securely log out your account'),
-                                onTap: () {
-                                  PreferenceHandler.deleteStoredId();
-                                  PreferenceHandler.deleteIsLogin();
-                                  context.pushAndRemoveAll(Welcomescreen());
-                                },
                               ),
-                            ),
-                          ],
+                              Material(
+                                child: ListTile(
+                                  dense: true,
+                                  leading: Icon(Icons.local_florist_outlined),
+                                  title: Text('Plant History'),
+                                  // subtitle: Text('Your '),
+                                  trailing: Icon(Icons.chevron_right),
+                                  tileColor: Colors.white,
+                                  onTap: () {
+                                    context.push(GardenHistoryScreen());
+                                  },
+                                ),
+                              ),
+
+                              //Notif
+                              // Material(
+                              //   child: ListTile(
+                              //     dense: true,
+                              //     leading: Icon(Icons.notifications_active),
+                              //     title: Text('Notification'),
+                              //     subtitle: Text(
+                              //       'Push alerts for scheduled plant care',
+                              //     ),
+                              //     trailing: Switch(
+                              //       value: _notifOff,
+                              //       onChanged: (bool newValue) {
+                              //         setState(() {
+                              //           _notifOff = newValue;
+                              //         });
+                              //       },
+                              //     ),
+                              //     tileColor: Colors.white,
+                              //   ),
+                              // ),
+
+                              //Logout
+                              Material(
+                                child: ListTile(
+                                  dense: true,
+                                  tileColor: Colors.white,
+                                  titleTextStyle: TextStyle(
+                                    color: AppColor.alertRed,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadiusGeometry.vertical(
+                                      bottom: Radius.circular(20),
+                                    ),
+                                  ),
+                                  title: Text('Log Out'),
+                                  leading: Icon(
+                                    Icons.logout,
+                                    color: AppColor.alertRed,
+                                  ),
+                                  subtitle: Text(
+                                    'Securely log out your account',
+                                  ),
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Are you sure want to logout?',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                context.pop();
+                                              },
+                                              child: Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                PreferenceHandler.deleteStoredId();
+                                                PreferenceHandler.deleteIsLogin();
+                                                context.pushAndRemoveAll(
+                                                  Welcomescreen(),
+                                                );
+                                              },
+                                              child: Text(
+                                                'Log Out',
+                                                style: TextStyle(
+                                                  color: AppColor.alertRed,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );

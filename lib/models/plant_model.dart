@@ -13,6 +13,7 @@ class PlantModel {
   final String lastFertilized;
   final String? harvestAt;
   final String? createdAt;
+  final int isHarvested;
   PlantModel({
     this.id,
     required this.plantName,
@@ -25,6 +26,7 @@ class PlantModel {
     required this.lastFertilized,
     this.harvestAt,
     this.createdAt,
+    required this.isHarvested,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +42,7 @@ class PlantModel {
       'lastFertilized': lastFertilized,
       'harvestAt': harvestAt,
       'createdAt': createdAt,
+      'isHarvested': isHarvested,
     };
   }
 
@@ -55,6 +58,7 @@ class PlantModel {
     String? lastFertilized,
     String? harvestAt,
     String? createdAt,
+    int? isHarvested,
   }) {
     return PlantModel(
       id: id ?? this.id,
@@ -69,6 +73,7 @@ class PlantModel {
       lastFertilized: lastFertilized ?? this.lastFertilized,
       harvestAt: harvestAt ?? this.harvestAt,
       createdAt: createdAt ?? this.createdAt,
+      isHarvested: isHarvested ?? this.isHarvested,
     );
   }
 
@@ -87,6 +92,7 @@ class PlantModel {
       lastFertilized: map['lastFertilized'] as String,
       harvestAt: map['harvestAt'] != null ? map['harvestAt'] as String : null,
       createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
+      isHarvested: map['isHarvested'] as int,
     );
   }
 

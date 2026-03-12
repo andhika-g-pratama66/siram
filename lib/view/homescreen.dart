@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:nandur_id/constants/color_const.dart';
 import 'package:nandur_id/database/plant_helper.dart';
@@ -22,13 +23,13 @@ class _HomescreenState extends State<Homescreen> {
   bool _isLoading = true;
   List<PlantModel> _plants = [];
   Map<DateTime, List<String>> _events = {};
-  DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
+
   @override
   void initState() {
     super.initState();
     _fetchUserData();
     _fetchPlantData();
+    _generateSchedule();
   }
 
   Future<void> _fetchUserData() async {
@@ -59,7 +60,6 @@ class _HomescreenState extends State<Homescreen> {
       int? id = await PreferenceHandler.getUserId();
       if (id == null) return;
 
-      // Use the correct variable name here (List, not single Model)
       List<PlantModel> data = await PlantHelper.getPlantsByUserId(id);
 
       if (mounted) {
@@ -77,6 +77,9 @@ class _HomescreenState extends State<Homescreen> {
     Map<DateTime, List<String>> schedule = {};
 
     for (var plant in _plants) {
+      if (plant.isHarvested == 1) {
+        continue;
+      }
       _addEventsForTask(
         schedule,
         plant.plantName,
@@ -106,8 +109,7 @@ class _HomescreenState extends State<Homescreen> {
   ) {
     DateTime last = DateTime.parse(lastDateStr);
 
-    // Predict next 4 cycles
-    for (int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= 30; i++) {
       DateTime scheduledDate = last.add(Duration(days: interval * i));
       DateTime day = DateTime(
         scheduledDate.year,
@@ -115,7 +117,6 @@ class _HomescreenState extends State<Homescreen> {
         scheduledDate.day,
       );
 
-      // CRITICAL: Append to the existing list so multiple plants show up
       map.putIfAbsent(day, () => []);
       map[day]!.add("$taskType $name");
     }
@@ -127,72 +128,92 @@ class _HomescreenState extends State<Homescreen> {
         ? const Center(child: CircularProgressIndicator())
         : _user == null
         ? const Center(child: Text("No user data found"))
-        : SafeArea(
-            child: Column(
-              children: [
-                Container(
-                  color: AppColor.baseGreen,
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    children: [LocationDisplay(), SizedBox(height: 32)],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                color: AppColor.baseGreen,
+                padding: EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
                   children: [
-                    SizedBox(height: 380, child: GardenWidget(itemCount: 3)),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TableCalendar(
-                        focusedDay: DateTime.now(),
-                        firstDay: DateTime(2000),
-                        lastDay: DateTime(2050),
-                        calendarFormat: CalendarFormat.week,
-                        selectedDayPredicate: (day) =>
-                            isSameDay(_selectedDay, day),
-                        onDaySelected: (selectedDay, focusedDay) {
-                          setState(() {
-                            _selectedDay = selectedDay;
-                            _focusedDay = focusedDay;
-                          });
-                        },
-
-                        eventLoader: (day) =>
-                            _events[DateTime(day.year, day.month, day.day)] ??
-                            [],
-                        calendarBuilders: CalendarBuilders(
-                          markerBuilder: (context, date, events) {
-                            if (events.isEmpty) return const SizedBox();
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: events.map((event) {
-                                Color markerColor =
-                                    event.toString().contains("Water")
-                                    ? Colors.blue
-                                    : Colors.orange;
-
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 1,
-                                  ),
-                                  width: 7,
-                                  height: 7,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: markerColor,
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
+                    FadeIn(child: LocationDisplay()),
+                    SizedBox(height: 32),
                   ],
                 ),
-              ],
-            ),
+              ),
+
+              GardenWidget(
+                itemCount: 3,
+                onChanged: () {
+                  _fetchPlantData();
+                },
+              ),
+              Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: const Text(
+                  'This Week Schedule',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TableCalendar(
+                  focusedDay: DateTime.now(),
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                    formatButtonVisible: false,
+                  ),
+                  firstDay: DateTime(2000),
+                  lastDay: DateTime(2050),
+                  calendarFormat: CalendarFormat.week,
+
+                  calendarStyle: CalendarStyle(
+                    selectedDecoration: BoxDecoration(
+                      color:
+                          AppColor.baseGreen, // Change this to your brand color
+                      shape: BoxShape.circle,
+                    ),
+
+                    selectedTextStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+
+                    todayDecoration: BoxDecoration(
+                      color: AppColor.baseGreen,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  eventLoader: (day) =>
+                      _events[DateTime(day.year, day.month, day.day)] ?? [],
+                  calendarBuilders: CalendarBuilders(
+                    markerBuilder: (context, date, events) {
+                      if (events.isEmpty) return const SizedBox();
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: events.map((event) {
+                          Color markerColor = event.toString().contains("Water")
+                              ? Colors.blue
+                              : Colors.orange;
+
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 1),
+                            width: 7,
+                            height: 7,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: markerColor,
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+            ],
           );
   }
 }
