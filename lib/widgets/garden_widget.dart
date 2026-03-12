@@ -69,7 +69,10 @@ class _GardenWidgetState extends State<GardenWidget> {
   }
 
   Future<void> _handleHarvest(PlantModel plant) async {
-    final updatedPlant = plant.copyWith(isHarvested: 1);
+    final updatedPlant = plant.copyWith(
+      isHarvested: 1,
+      harvestAt: DateTime.now().toIso8601String(),
+    );
     try {
       await PlantHelper.updatePlant(updatedPlant);
       widget.onChanged?.call();
@@ -499,6 +502,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                       confirmContext.pop();
                       context.pop();
                       await _handleHarvest(plant);
+                      _refreshPlants();
                     },
                     child: const Text('Harvest'),
                   ),
@@ -540,6 +544,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                       confirmContext.pop();
                       context.pop();
                       await _handleDelete(plant.id!);
+                      _refreshPlants();
                     },
                     child: const Text('Delete'),
                   ),
