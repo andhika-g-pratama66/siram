@@ -355,7 +355,7 @@ class _GardenWidgetState extends State<GardenWidget> {
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Dismiss',
-      transitionDuration: const Duration(milliseconds: 400),
+      // transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, anim1, anim2) {
         return StatefulBuilder(
           builder: (context, setDialogState) {
@@ -367,7 +367,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(32.0),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -379,7 +379,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 32),
 
                         TextFormField(
                           controller: nameController,
@@ -387,7 +387,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                             labelText: 'Plant Name',
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
 
                         TextFormField(
                           controller: descriptionController,
@@ -396,21 +396,21 @@ class _GardenWidgetState extends State<GardenWidget> {
                           ),
                         ),
 
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
                         TextFormField(
                           controller: waterController,
                           decoration: formInputConstant(
                             labelText: 'Watering Interval (Days)',
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
                         TextFormField(
                           controller: fertilizingController,
                           decoration: formInputConstant(
                             labelText: 'Fertilizing Interval (Days)',
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
 
                         TextFormField(
                           controller: harvestDateController,
@@ -457,6 +457,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                           },
                           child: const Text('Update Plant'),
                         ),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:nandur_id/view/splashscreen.dart';
 
@@ -16,9 +16,9 @@ class MainApp extends StatelessWidget {
       title: 'Nandur: Plant Monitoring & Scheduling',
 
       theme: ThemeData(
-        // textTheme: GoogleFonts.robotoTextTheme().copyWith(
-        //   bodyMedium: GoogleFonts.roboto(),
-        // ),
+        textTheme: GoogleFonts.robotoTextTheme().copyWith(
+          bodyMedium: GoogleFonts.roboto(),
+        ),
         colorScheme: .fromSeed(seedColor: Colors.white),
       ),
       home: Splashscreen(),

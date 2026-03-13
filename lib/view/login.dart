@@ -33,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return FadeIn(
       child: Scaffold(
         appBar: AppBar(backgroundColor: AppColor.baseGreen),
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Column(
             children: [

@@ -37,7 +37,7 @@ class _NavBarGlobalState extends State<NavBarGlobal> {
     return Scaffold(
       appBar: AppBar(backgroundColor: appBarColorOptions[_selectedIndex]),
       body: widgetOptions.elementAt(_selectedIndex),
-
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

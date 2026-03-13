@@ -106,6 +106,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(32),

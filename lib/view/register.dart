@@ -36,6 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return FadeIn(
       child: Scaffold(
         appBar: AppBar(backgroundColor: AppColor.baseGreen),
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Form(
             key: _formKey,
