@@ -137,7 +137,7 @@ class _MyProfileState extends State<MyProfile> {
                                   dense: true,
                                   leading: Icon(Icons.local_florist_outlined),
                                   title: Text('Plant History'),
-                                  // subtitle: Text('Your '),
+                                  subtitle: Text('Your previous plant'),
                                   trailing: Icon(Icons.chevron_right),
                                   tileColor: Colors.white,
                                   onTap: () {

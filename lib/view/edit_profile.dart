@@ -122,12 +122,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Edit Profile')),
-      resizeToAvoidBottomInset: false,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : FadeInRight(
               child: SingleChildScrollView(
-                // Added scroll view to prevent overflow
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
@@ -140,7 +138,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     // Name Field
                     TextFormField(
                       controller: _nameController,
-                      decoration: formInputConstant(labelText: 'Full Name'),
+                      decoration: formInputConstant(
+                        labelText: 'Full Name',
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -151,6 +153,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       onTap: () => _selectDate(context),
                       decoration: formInputConstant(
                         labelText: 'Date of Birth',
+                        filled: true,
+                        fillColor: Colors.white,
                       ).copyWith(suffixIcon: const Icon(Icons.calendar_today)),
                     ),
                     const SizedBox(height: 20),
@@ -166,7 +170,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       onChanged: (newValue) {
                         setState(() => _selectedGender = newValue);
                       },
-                      decoration: formInputConstant(labelText: 'Gender'),
+                      decoration: formInputConstant(
+                        labelText: 'Gender',
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
                     ),
 
                     const SizedBox(height: 40),
