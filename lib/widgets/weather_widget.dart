@@ -26,21 +26,21 @@ class LocationDisplay extends StatelessWidget {
 
           return ElevatedButton(
             style: AppButtonStyles.greenWeather(),
+
             onPressed: () {},
-            child: Center(
-              child: Row(
-                children: [
-                  Icon(Icons.location_on),
-                  SizedBox(width: 16),
-                  Text(
-                    cityName,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.location_on),
+                SizedBox(width: 16),
+                Text(
+                  cityName,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         }

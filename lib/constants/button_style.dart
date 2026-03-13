@@ -70,7 +70,9 @@ class AppButtonStyles {
 
       padding: EdgeInsets.all(16),
       minimumSize: Size.fromHeight(100),
-      shape: _baseShape,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(32),
+      ),
     );
   }
 }

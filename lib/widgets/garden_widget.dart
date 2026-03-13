@@ -194,7 +194,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                             : const NeverScrollableScrollPhysics(),
                         shrinkWrap: !widget.isScrollable,
 
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         itemCount: widget.itemCount != null
                             ? min(plants.length, widget.itemCount!)
                             : plants.length,
@@ -269,62 +269,71 @@ class _GardenWidgetState extends State<GardenWidget> {
 
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(plant.plantName),
+        return FadeIn(
+          child: AlertDialog(
+            title: Text(plant.plantName),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
+            icon: Icon(Icons.local_florist, color: AppColor.baseGreen),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Start Date:'),
+                Row(
+                  children: [
+                    Icon(Icons.calendar_month),
+                    SizedBox(width: 4),
+                    Text(
+                      DateFormat.yMMMd().format(
+                        DateTime.parse(plant.createdAt!),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                Text('Estimated Harvest Date:'),
 
-          icon: Icon(Icons.local_florist, color: AppColor.baseGreen),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Start Date:'),
-              Row(
-                children: [
-                  Icon(Icons.calendar_month),
-                  SizedBox(width: 4),
-                  Text(
-                    DateFormat.yMMMd().format(DateTime.parse(plant.createdAt!)),
-                  ),
-                ],
+                Row(
+                  children: [
+                    Icon(Icons.calendar_month),
+                    SizedBox(width: 4),
+                    Text(
+                      DateFormat.yMMMd().format(
+                        DateTime.parse(plant.harvestAt!),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  customDialog(context, plant);
+                },
+                child: Text('Edit'),
               ),
-              SizedBox(height: 12),
-              Text('Estimated Harvest Date:'),
 
-              Row(
-                children: [
-                  Icon(Icons.calendar_month),
-                  SizedBox(width: 4),
-                  Text(
-                    DateFormat.yMMMd().format(DateTime.parse(plant.harvestAt!)),
-                  ),
-                ],
+              TextButton(
+                onPressed: () {
+                  deleteDialog(context, plant);
+                },
+                child: Text(
+                  'Delete',
+                  style: TextStyle(color: AppColor.alertRed),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  harvestDialog(context, plant);
+                },
+                child: Text(
+                  'Harvest',
+                  style: TextStyle(color: Colors.deepOrange),
+                ),
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                customDialog(context, plant);
-              },
-              child: Text('Edit'),
-            ),
-            TextButton(
-              onPressed: () {
-                deleteDialog(context, plant);
-              },
-              child: Text('Delete', style: TextStyle(color: AppColor.alertRed)),
-            ),
-
-            TextButton(
-              onPressed: () {
-                harvestDialog(context, plant);
-              },
-              child: Text(
-                'Harvest',
-                style: TextStyle(color: Colors.deepOrange),
-              ),
-            ),
-          ],
         );
       },
     );
@@ -454,6 +463,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                               harvestAt: isoHarvestDate, // Save the ISO string
                             );
                             Navigator.pop(context, updatedPlant);
+                            widget.onChanged?.call();
                           },
                           child: const Text('Update Plant'),
                         ),
