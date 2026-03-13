@@ -81,9 +81,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         TextFormField(
                           controller: passwordController,
-                          //TODO: remove validator
-                          // validator: (value) =>
-                          //     _validator.validatePassword(value),
+
+                          validator: (value) =>
+                              _validator.validatePassword(value),
                           obscureText: _isObscured,
                           decoration: formInputConstant(
                             labelText: 'Password',
