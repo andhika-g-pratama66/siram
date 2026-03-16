@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:nandur_id/constants/button_style.dart';
 import 'package:nandur_id/constants/color_const.dart';
 import 'package:nandur_id/constants/form_decoration.dart';
@@ -9,6 +10,7 @@ import 'package:nandur_id/database/plant_helper.dart';
 import 'package:nandur_id/database/preference.dart';
 import 'package:nandur_id/database/sqflite.dart';
 import 'package:nandur_id/models/plant_model.dart';
+import 'package:nandur_id/services/notification_service.dart';
 import 'package:nandur_id/utils/navigator.dart';
 
 import 'package:nandur_id/view/add_plant.dart';
@@ -75,6 +77,7 @@ class _GardenWidgetState extends State<GardenWidget> {
     );
     try {
       await PlantHelper.updatePlant(updatedPlant);
+
       widget.onChanged?.call();
     } catch (e) {
       debugPrint('Failed to update plant: $e');
@@ -84,6 +87,7 @@ class _GardenWidgetState extends State<GardenWidget> {
   Future<void> _handleDelete(int id) async {
     final db = await DBHelper.db();
     await db.delete('plants', where: 'id = ?', whereArgs: [id]);
+    await NotificationService.cancelNotification(id);
     widget.onChanged?.call();
     _refreshPlants();
   }
@@ -513,6 +517,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                       confirmContext.pop();
                       context.pop();
                       await _handleHarvest(plant);
+                      await NotificationService.cancelNotification(plant.id!);
                       _refreshPlants();
                     },
                     child: const Text('Harvest'),
@@ -555,6 +560,7 @@ class _GardenWidgetState extends State<GardenWidget> {
                       confirmContext.pop();
                       context.pop();
                       await _handleDelete(plant.id!);
+                      await NotificationService.cancelNotification(plant.id!);
                       _refreshPlants();
                     },
                     child: const Text('Delete'),
@@ -575,9 +581,18 @@ class _GardenWidgetState extends State<GardenWidget> {
 
   Widget _buildEmptyState() {
     return Center(
-      child: Text(
-        "No plants yet. Tap + to start!",
-        style: TextStyle(color: Colors.grey[500], fontStyle: FontStyle.italic),
+      child: Column(
+        children: [
+          Text(
+            "No plants yet. Tap + to start!",
+            style: TextStyle(
+              color: Colors.grey[500],
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          SizedBox(height: 32),
+          // Lottie.asset('assets/lottie/plant.json', height: 100),
+        ],
       ),
     );
   }

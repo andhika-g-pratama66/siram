@@ -142,21 +142,42 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 markerBuilder: (context, date, events) {
                   if (events.isEmpty) return const SizedBox();
 
+                  // Limit the number of visible dots to prevent overflow
+                  const int maxDots = 4;
+                  final visibleEvents = events.take(maxDots).toList();
+                  final hasMore = events.length > maxDots;
+
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: events.take(3).map((event) {
-                      final isWater = event.toString().contains("Water");
+                    children: [
+                      ...visibleEvents.map((event) {
+                        Color markerColor = event.toString().contains("Water")
+                            ? Colors.blue
+                            : Colors.orange;
 
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 1),
-                        width: 7,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isWater ? Colors.blue : Colors.orange,
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 1),
+                          width: 6, // Slightly smaller to fit better
+                          height: 6,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: markerColor,
+                          ),
+                        );
+                      }),
+                      if (hasMore)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 1),
+                          child: Text(
+                            '+',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ),
-                      );
-                    }).toList(),
+                    ],
                   );
                 },
               ),

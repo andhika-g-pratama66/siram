@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nandur_id/services/notification_service.dart';
 
 import 'package:nandur_id/view/splashscreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize the notification service
+  await NotificationService.init();
   runApp(const MainApp());
 }
 
@@ -19,7 +23,7 @@ class MainApp extends StatelessWidget {
         textTheme: GoogleFonts.robotoTextTheme().copyWith(
           bodyMedium: GoogleFonts.roboto(),
         ),
-        colorScheme: .fromSeed(seedColor: Colors.white),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
       home: Splashscreen(),
     );

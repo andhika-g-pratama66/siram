@@ -9,6 +9,7 @@ import 'package:nandur_id/constants/form_decoration.dart';
 import 'package:nandur_id/database/plant_helper.dart';
 import 'package:nandur_id/database/preference.dart';
 import 'package:nandur_id/models/plant_model.dart';
+import 'package:nandur_id/services/notification_service.dart';
 
 import 'package:nandur_id/utils/validator_helper.dart';
 
@@ -75,6 +76,8 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
     final plantingDate = _selectedDateTime ?? DateTime.now();
     final harvestDays = int.tryParse(_harvestingController.text) ?? 0;
     final harvestDate = plantingDate.add(Duration(days: harvestDays));
+    final waterInterval = int.tryParse(_wateringController.text) ?? 0;
+    final fertInterval = int.tryParse(_fertilizeController.text) ?? 0;
 
     final currentId = await PreferenceHandler.getUserId();
 
@@ -92,7 +95,15 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
       isHarvested: 0,
     );
 
-    await PlantHelper.createPlant(newPlant);
+    int generatedId = await PlantHelper.createPlant(newPlant);
+    if (waterInterval > 0 || fertInterval > 0) {
+      await NotificationService.schedulePlantReminder(
+        plantId: generatedId,
+        plantName: _nameController.text,
+        wateringIntervalDays: waterInterval,
+        fertilizingIntervalDays: fertInterval,
+      );
+    }
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -272,7 +283,9 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                   SizedBox(height: 20),
                   ElevatedButton(
                     style: AppButtonStyles.solidGreen(),
-                    onPressed: () {
+                    onPressed: () async {
+                      await NotificationService.requestPermissions();
+
                       _savePlant();
                     },
                     child: Text('Add Plant'),

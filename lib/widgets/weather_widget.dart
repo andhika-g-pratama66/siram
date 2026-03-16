@@ -29,15 +29,19 @@ class LocationDisplay extends StatelessWidget {
 
             onPressed: () {},
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.location_on),
                 SizedBox(width: 16),
-                Text(
-                  cityName,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    cityName,
+
+                    maxLines: 2,
+
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],

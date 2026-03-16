@@ -18,7 +18,6 @@ class _WelcomescreenState extends State<Welcomescreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfffafcf1),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: BounceInDown(
@@ -26,11 +25,17 @@ class _WelcomescreenState extends State<Welcomescreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Image.asset('assets/logo/nandur_logo1.png', width: 300),
+              SizedBox(height: 32),
+              Text(
+                'Getting Started',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 32),
               Lottie.asset(
-                'assets/lottie/plant.json',
+                'assets/lottie/gardening.json',
+                backgroundLoading: false,
                 width: 250,
-                repeat: false,
+                animate: false,
               ),
               SizedBox(height: 32),
               ElevatedButton(
@@ -38,7 +43,10 @@ class _WelcomescreenState extends State<Welcomescreen> {
                 onPressed: () {
                   context.pushAndRemoveAll(LoginScreen());
                 },
-                child: Text('Sign in'),
+                child: Text(
+                  'Sign in',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
               SizedBox(height: 12),
               ElevatedButton(
@@ -47,7 +55,10 @@ class _WelcomescreenState extends State<Welcomescreen> {
                 onPressed: () {
                   context.pushAndRemoveAll(RegisterScreen());
                 },
-                child: Text('Create Account'),
+                child: Text(
+                  'Create Account',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),

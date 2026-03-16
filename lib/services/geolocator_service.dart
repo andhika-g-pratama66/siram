@@ -53,6 +53,14 @@ class LocationService {
       position.longitude,
     );
 
-    return placemarks.first.locality ?? "Unknown City";
+    if (placemarks.isNotEmpty) {
+      Placemark place = placemarks.first;
+      String city = place.administrativeArea ?? "Unknown City";
+      String country = place.country ?? "Unknown Country";
+
+      return "$city, $country";
+    }
+
+    return "Unknown Location";
   }
 }

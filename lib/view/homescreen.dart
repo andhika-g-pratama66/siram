@@ -132,8 +132,14 @@ class _HomescreenState extends State<Homescreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                color: AppColor.baseGreen,
-                padding: EdgeInsets.symmetric(horizontal: 32),
+                decoration: BoxDecoration(
+                  color: AppColor.baseGreen,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
                     FadeIn(child: LocationDisplay()),
@@ -190,23 +196,44 @@ class _HomescreenState extends State<Homescreen> {
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (context, date, events) {
                       if (events.isEmpty) return const SizedBox();
+
+                      // Limit the number of visible dots to prevent overflow
+                      const int maxDots = 4;
+                      final visibleEvents = events.take(maxDots).toList();
+                      final hasMore = events.length > maxDots;
+
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: events.map((event) {
-                          Color markerColor = event.toString().contains("Water")
-                              ? Colors.blue
-                              : Colors.orange;
+                        children: [
+                          ...visibleEvents.map((event) {
+                            Color markerColor =
+                                event.toString().contains("Water")
+                                ? Colors.blue
+                                : Colors.orange;
 
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 1),
-                            width: 7,
-                            height: 7,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: markerColor,
+                            return Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 1),
+                              width: 6, // Slightly smaller to fit better
+                              height: 6,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: markerColor,
+                              ),
+                            );
+                          }),
+                          if (hasMore)
+                            const Padding(
+                              padding: EdgeInsets.only(left: 1),
+                              child: Text(
+                                '+',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
-                          );
-                        }).toList(),
+                        ],
                       );
                     },
                   ),
