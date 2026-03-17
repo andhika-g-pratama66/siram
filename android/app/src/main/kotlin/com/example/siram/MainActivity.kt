@@ -1,4 +1,4 @@
-package com.example.siram
+package com.gama.nandur
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
+
 import 'package:nandur_id/constants/button_style.dart';
 import 'package:nandur_id/constants/color_const.dart';
 import 'package:nandur_id/constants/form_decoration.dart';
@@ -12,9 +12,7 @@ import 'package:nandur_id/database/sqflite.dart';
 import 'package:nandur_id/models/plant_model.dart';
 import 'package:nandur_id/services/notification_service.dart';
 import 'package:nandur_id/utils/navigator.dart';
-
 import 'package:nandur_id/view/add_plant.dart';
-
 import 'package:nandur_id/view/plant_list.dart';
 
 class GardenWidget extends StatefulWidget {
