@@ -19,13 +19,11 @@ class _WelcomescreenState extends State<Welcomescreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: BounceInDown(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 32),
               Text(
                 'Getting Started',
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -35,7 +33,7 @@ class _WelcomescreenState extends State<Welcomescreen> {
                 'assets/lottie/gardening.json',
                 backgroundLoading: false,
                 width: 250,
-                animate: false,
+                // animate: false,
               ),
               SizedBox(height: 32),
               ElevatedButton(

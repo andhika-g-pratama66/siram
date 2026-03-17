@@ -167,7 +167,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       }),
                       if (hasMore)
                         const Padding(
-                          padding: EdgeInsets.only(left: 1),
+                          padding: EdgeInsets.only(left: 11),
                           child: Text(
                             '+',
                             style: TextStyle(

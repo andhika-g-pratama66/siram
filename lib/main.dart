@@ -25,6 +25,7 @@ class MainApp extends StatelessWidget {
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
+      debugShowCheckedModeBanner: false,
       home: Splashscreen(),
     );
   }

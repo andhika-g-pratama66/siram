@@ -75,4 +75,15 @@ class AppButtonStyles {
       ),
     );
   }
+
+  static BoxDecoration primaryGradient() {
+    return BoxDecoration(
+      gradient: const LinearGradient(
+        colors: [AppColor.baseGreen, AppColor.lightGreen],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      ),
+      borderRadius: BorderRadius.circular(16),
+    );
+  }
 }
